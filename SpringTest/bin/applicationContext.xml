@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:c="http://www.springframework.org/schema/c"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+		
+	<!-- XML配置文件三种注入方式测试 -->
+	<!-- 1.setter方法
+		 2.构造器注入
+		 3.扫描注解注入 	dao层注解：@Repository
+						service层注解：@Service
+						控制器层注解：@Controller
+						通用：@Component
+	 -->
+	 
+	 
+	 <!-- 配置数据库相关 -->
+	<bean id="dataSource"
+		class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName"
+			value="com.mysql.jdbc.Driver"></property>
+		<property name="url"
+			value="jdbc:mysql://localhost:3306/shouhou"></property>
+		<property name="username" value="root"></property>
+		<property name="password" value="123456"></property>
+		<property name="maxActive" value="10"></property>
+		<property name="maxIdle" value="6"></property>
+	</bean>
+
+
+	<!-- 配置事务管理器txManager -->
+	<bean id="txManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+
+
+
+	<!-- 增加对事务的支持 -->
+	<tx:annotation-driven  transaction-manager="txManager" />
+
+	
+	<!-- 开启注解扫描器 -->
+	<context:component-scan base-package="com.dao"/>
+	<context:component-scan base-package="com.service"/>
+	
+	<!-- 通过setter方法注入学生bean -->
+	<bean id="student1" class="com.entity.Student">
+	<property name="stuNo" value="1"></property>
+	<property name="stuName" value="小明"></property>
+	<property name="stuAge" value="23"></property>
+	<property name="stuSex" value="true"></property>
+	<property name="stuAddress" ref="address1"></property>
+	</bean>
+	
+	<!-- 通过setter方法注入地址bean -->
+	<bean id="address1" class="com.entity.Address">
+	<property name="schoolAddress" value="西安大学"></property>
+	<property name="homeAddress" value="渭南市"></property>
+	</bean>
+	
+	<!-- 通过构造器注入学生bean  -->
+	<!-- index属性可以指定构造方法中的先后顺序 type属性可以定义类型 -->
+	<bean id="student2" class="com.entity.Student">
+	<constructor-arg name="stuName" index="1" value="小兰"></constructor-arg>
+	<constructor-arg name="stuNo" index="0" value="2"></constructor-arg>
+	<constructor-arg name="stuAge" index="2" value="23"></constructor-arg>
+	<constructor-arg name="stuSex" index="3" value="false"></constructor-arg>
+	<constructor-arg name="stuAddress" index="4" ref="address2"></constructor-arg>
+	</bean>
+	
+	<!-- 通过构造器注入地址bean  -->
+	<bean id="address2" class="com.entity.Address">
+	<constructor-arg name="schoolAddress" index="0" value="渭南大学"></constructor-arg>
+	<constructor-arg name="homeAddress" index="1" value="渭南市"></constructor-arg>
+	</bean>
+	
+	<!-- p命名空间注入 -->
+	<!-- 关键句    xmlns:p="http://www.springframework.org/schema/p" -->
+	<bean id="student3" class="com.entity.Student" 
+	p:stuNo="3" p:stuName="小虎" p:stuAddress-ref="address2"/>
+
+	<!--通过setter方法注入List集合-->
+	<bean id="stulist" class="com.entity.Students">
+	<property name="stuList">
+		<list>
+			<ref bean="student1"/>
+			<ref bean="student2"/>
+			<ref bean="student3"/>
+		</list>
+	</property>
+	
+	</bean>
+	
+	<!-- 注解方式的注入 -->
+
+	
+	
+</beans>
