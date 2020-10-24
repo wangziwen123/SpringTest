@@ -1,5 +1,7 @@
 package com.test;
 
+import java.util.Map;
+
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -18,7 +20,8 @@ public class Test {
 //		new Test().AnnocationTest() ;
 //		new Test().AopXMLTest() ;
 //		new Test().AopAnnotationTest() ;
-		new Test().AnnotationScan();
+//		new Test().AnnotationScan();
+		new Test().ConditionTest();
 	}
 	public void AnnotationScan() {    //JAVA配置注解类的DI方式
 		AnnotationConfigApplicationContext context = 
@@ -119,6 +122,15 @@ public class Test {
 		for (String ob : stus) {
 			System.out.println(ob.toString());
 		}
+	}
+	
+	public void ConditionTest() {
+		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(Config1.class);
+		
+		Map<String, Address> beansOfType = context.getBeansOfType(Address.class);
+		System.out.println(beansOfType.toString());
+		
+		
 	}
 
 }

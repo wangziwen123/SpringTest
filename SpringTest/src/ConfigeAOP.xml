@@ -18,7 +18,6 @@
 		<property name="studao" ref="stuDao1"> </property>
 	</bean>
 	
-	
 	<!-- 实现接口形式的AOP -->
 	
 	<!-- 配置前置通知 -->

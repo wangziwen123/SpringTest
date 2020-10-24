@@ -4,11 +4,13 @@ package com.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
 
+import com.condition.Acondition;
 import com.entity.Address;
 import com.entity.Student;
 /**
@@ -57,6 +59,24 @@ public class Config1 {
 		Address address = new Address("西安大学","渭南市") ;
 		return address ;
 		
+	}
+	
+	@Bean(value = "address4")
+	@Conditional(Acondition.class)
+	public Address Address4() {
+		System.out.println("条件注解。。。。。。。。。。。。。。。。。");
+		
+		Address address = new Address("西安科技","西安市");
+		return address;	
+	}
+	
+	@Bean(value = "address5")
+	@Conditional(Acondition.class)
+	public Address Address5() {
+		System.out.println("条件注解。。。。。。。。。。。。。。。。。");
+		
+		Address address = new Address("西安科技","西安市");
+		return address;	
 	}
 
 }
